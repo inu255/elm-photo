@@ -34,7 +34,7 @@ view model =
             [ text "Surprise Me!" ]
         , h3 [] [ text "Thumbnail Size:" ]
         , div [ id "choose-size" ]
-            (List.map viewSizeChooser [ Small, Medium, Large ])
+            (List.map (viewSizeChooser model) [ Small, Medium, Large ])
         , div [ id "thumbnails", class (sizeToString model.chosenSize) ]
             -- (List.map
             --     (\photo -> viewThumbnail model.selectedUrl photo)
@@ -61,21 +61,21 @@ viewThumbnail selectedUrl thumb =
         []
 
 
-viewSizeChooser : ThumbnailSize -> Html Msg
-viewSizeChooser size =
+viewSizeChooser : Model -> ThumbnailSize -> Html Msg
+viewSizeChooser model size =
     label []
-        [ input [ type_ "radio", name "size", onClick (ClickedSize size) ] []
+        [ input [ type_ "radio", name "size", onClick (ClickedSize size), checked (checkRadioState model size) ] []
         , text (sizeToString size)
         ]
 
 
+checkRadioState : Model -> ThumbnailSize -> Bool
+checkRadioState model size =
+    if model.chosenSize == size then
+        True
 
--- checkRadioState : Model -> ThumbnailSize -> Bool
--- checkRadioState model size =
---     if model.chosenSize == size then
---         True
---     else
---         False
+    else
+        False
 
 
 randomPhotoPicker : Random.Generator Int
